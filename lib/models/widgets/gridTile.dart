@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopapp/pages/products_details.dart';
+import 'package:shopapp/providers/productsModels.dart';
 
 class ProductsGridTile extends StatefulWidget {
-  final String id;
-  final String title;
-  final String imageUrl;
+  // final String id;
+  // final String title;
+  // final String imageUrl;
 
-  const ProductsGridTile({Key key, this.id, this.title, this.imageUrl})
-      : super(key: key);
+  // const ProductsGridTile({Key key, this.id, this.title, this.imageUrl})
+  //     : super(key: key);
   @override
   _ProductsGridTileState createState() => _ProductsGridTileState();
 }
@@ -15,27 +17,36 @@ class ProductsGridTile extends StatefulWidget {
 class _ProductsGridTileState extends State<ProductsGridTile> {
   @override
   Widget build(BuildContext context) {
+    final products = Provider.of<Product>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(13),
       child: InkWell(
         onTap: () {
           Navigator.of(context)
-              .pushNamed(ProductsDetails.routeName, arguments: widget.id);
+              .pushNamed(ProductsDetails.routeName, arguments: products.id);
         },
         child: GridTile(
           child: Image.network(
-            widget.imageUrl,
+            products.imageUrl,
             fit: BoxFit.cover,
           ),
           footer: GridTileBar(
-            leading: IconButton(
-              icon: Icon(Icons.favorite_rounded),
-              color: Theme.of(context).accentColor,
-              onPressed: () {},
+            leading: Consumer<Product>(
+              builder: (context, value, child) {
+                return IconButton(
+                  icon: Icon(products.isFavourite
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_outlined),
+                  color: Theme.of(context).accentColor,
+                  onPressed: () {
+                    products.changeFavouriteValue();
+                  },
+                );
+              },
             ),
             backgroundColor: Colors.black87,
             title: Text(
-              widget.title,
+              products.title,
               textAlign: TextAlign.center,
             ),
             trailing: IconButton(

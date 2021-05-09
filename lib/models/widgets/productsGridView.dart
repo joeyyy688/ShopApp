@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopapp/models/productsModels.dart';
+import 'package:shopapp/providers/productsModels.dart';
 import 'package:shopapp/models/widgets/gridTile.dart';
 import 'package:shopapp/providers/products_provider.dart';
 
@@ -23,10 +23,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10),
       itemBuilder: (context, index) {
-        return ProductsGridTile(
-          id: loadedProducts[index].id,
-          title: loadedProducts[index].title,
-          imageUrl: loadedProducts[index].imageUrl,
+        return ChangeNotifierProvider<Product>.value(
+          value: loadedProducts[index],
+          child: ProductsGridTile(),
         );
       },
     );
