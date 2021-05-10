@@ -5,6 +5,9 @@ import 'package:shopapp/models/widgets/gridTile.dart';
 import 'package:shopapp/providers/products_provider.dart';
 
 class ProductsGridView extends StatefulWidget {
+  final bool favouriteData;
+
+  const ProductsGridView({Key key, this.favouriteData}) : super(key: key);
   @override
   _ProductsGridViewState createState() => _ProductsGridViewState();
 }
@@ -13,7 +16,9 @@ class _ProductsGridViewState extends State<ProductsGridView> {
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context);
-    List<Product> loadedProducts = productsData.items;
+    List<Product> loadedProducts = widget.favouriteData
+        ? productsData.showFavouritesItems
+        : productsData.items;
     return GridView.builder(
       padding: EdgeInsets.all(10),
       itemCount: loadedProducts.length,

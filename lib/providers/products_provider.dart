@@ -39,10 +39,14 @@ class ProductsProvider with ChangeNotifier {
   bool _showFavourites = false;
 
   List<Product> get items {
-    if (_showFavourites) {
-      return _items.where((element) => element.isFavourite).toList();
-    }
+    // if (_showFavourites) {
+    //   return _items.where((element) => element.isFavourite).toList();
+    // }
     return [..._items];
+  }
+
+  List<Product> get showFavouritesItems {
+    return [..._items.where((element) => element.isFavourite).toList()];
   }
 
   Product searchItemByID(String id) {
@@ -54,13 +58,13 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void showFavouritesOnly() {
-    _showFavourites = true;
-    notifyListeners();
-  }
+  // void showFavouritesOnly() {
+  //   _showFavourites = true;
+  //   notifyListeners();
+  // }
 
-  void showAllOnly() {
-    _showFavourites = false;
-    notifyListeners();
-  }
+  // void showAllOnly() {
+  //   _showFavourites = false;
+  //   notifyListeners();
+  // }
 }

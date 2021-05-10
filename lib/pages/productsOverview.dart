@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 import 'package:shopapp/models/widgets/productsGridView.dart';
-import 'package:shopapp/providers/productsModels.dart';
-import 'package:shopapp/providers/products_provider.dart';
+// import 'package:shopapp/providers/productsModels.dart';
+// import 'package:shopapp/providers/products_provider.dart';
 
 enum FilterOption { Favourite, All }
 
@@ -12,9 +12,10 @@ class ProductsOverview extends StatefulWidget {
 }
 
 class _ProductsOverviewState extends State<ProductsOverview> {
+  bool showOnlyFavouritesData = false;
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<ProductsProvider>(context);
+    //final product = Provider.of<ProductsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Myshop'),
@@ -34,19 +35,25 @@ class _ProductsOverviewState extends State<ProductsOverview> {
               ];
             },
             onSelected: (FilterOption value) {
-              switch (value) {
-                case FilterOption.Favourite:
-                  product.showFavouritesOnly();
-                  break;
-                default:
-                  product.showAllOnly();
-                  break;
-              }
+              setState(() {
+                switch (value) {
+                  case FilterOption.Favourite:
+                    showOnlyFavouritesData = true;
+                    //product.showFavouritesOnly();
+                    break;
+                  default:
+                    showOnlyFavouritesData = false;
+                    //product.showAllOnly();
+                    break;
+                }
+              });
             },
           )
         ],
       ),
-      body: ProductsGridView(),
+      body: ProductsGridView(
+        favouriteData: showOnlyFavouritesData,
+      ),
     );
   }
 }
