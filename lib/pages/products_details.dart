@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/constants/colors.dart';
 import 'package:shopapp/providers/productsModels.dart';
 import 'package:shopapp/providers/products_provider.dart';
 
@@ -16,10 +19,48 @@ class _ProductsDetailsState extends State<ProductsDetails> {
     Product selectedProductData =
         Provider.of<ProductsProvider>(context).searchItemByID(productID);
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: Text(selectedProductData.title),
       ),
-      //body: ,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 350,
+              width: double.infinity,
+              child: Image.network(
+                selectedProductData.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              child: Text(
+                '\$${selectedProductData.price}',
+                style: TextStyle(fontSize: 25, color: greyColor),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              //margin: EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                '${selectedProductData.description}',
+                softWrap: true,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
