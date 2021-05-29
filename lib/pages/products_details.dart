@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shopapp/constants/colors.dart';
 import 'package:shopapp/providers/productsModels.dart';
 import 'package:shopapp/providers/products_provider.dart';
+import 'package:shopapp/widgets/app_Drawer.dart';
 
 class ProductsDetails extends StatefulWidget {
   static const routeName = '/products_details';

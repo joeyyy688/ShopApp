@@ -1,8 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/widgets/app_Drawer.dart';
 //import 'package:provider/provider.dart';
-import 'package:shopapp/models/widgets/productsGridView.dart';
+import 'package:shopapp/widgets/productsGridView.dart';
 import 'package:shopapp/pages/cartPage.dart';
 import 'package:shopapp/providers/cart.dart';
 // import 'package:shopapp/providers/productsModels.dart';
@@ -74,6 +75,7 @@ class _ProductsOverviewState extends State<ProductsOverview> {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductsGridView(
         favouriteData: showOnlyFavouritesData,
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/providers/productsModels.dart';
-import 'package:shopapp/models/widgets/gridTile.dart';
+import 'package:shopapp/widgets/gridTile.dart';
 import 'package:shopapp/providers/products_provider.dart';
 
 class ProductsGridView extends StatefulWidget {

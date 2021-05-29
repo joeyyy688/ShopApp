@@ -16,7 +16,7 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
-  List<OrderItem> get orderItems => [..._orders];
+  List<OrderItem> get ordersItems => [..._orders];
 
   void addOrder(List<CartItem> cartProducts, double totalAmount) {
     this._orders.add(OrderItem(
