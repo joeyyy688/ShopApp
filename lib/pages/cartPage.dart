@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/constants/colors.dart';
 import 'package:shopapp/providers/cart.dart';
+import 'package:shopapp/providers/orders.dart';
 
 class CartPage extends StatefulWidget {
   static const routeName = '/cartPage';
@@ -15,6 +16,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context, listen: true);
+    final orders = Provider.of<Orders>(context, listen: true);
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
@@ -45,7 +47,11 @@ class _CartPageState extends State<CartPage> {
                         style: TextStyle(color: Colors.white),
                       )),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        orders.addOrder(
+                            cart.items.values.toList(), cart.totalAmount);
+                        cart.clearCart();
+                      },
                       child: Text(
                         'ORDER NOW',
                         style: TextStyle(color: Theme.of(context).primaryColor),
