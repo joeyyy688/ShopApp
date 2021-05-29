@@ -43,7 +43,7 @@ class _CartPageState extends State<CartPage> {
                   Chip(
                       backgroundColor: Theme.of(context).primaryColor,
                       label: Text(
-                        '\$ ${cart.totalAmount}',
+                        '\$ ${cart.totalAmount.toStringAsFixed(2)}',
                         style: TextStyle(color: Colors.white),
                       )),
                   TextButton(
