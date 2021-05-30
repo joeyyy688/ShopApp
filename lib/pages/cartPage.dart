@@ -83,6 +83,34 @@ class _CartPageState extends State<CartPage> {
                     ),
                   ),
                 ),
+                confirmDismiss: (direction) {
+                  return showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Are you sure"),
+                        content: Text('Do you want to remove item from cart?'),
+                        actions: [
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                              //Navigator.pop(context);
+                              //return Future.value(false);
+                            },
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                                //Navigator.pop(context);
+                                //return Future.value(true);
+                              },
+                              child: Text('Yes'))
+                        ],
+                      );
+                    },
+                  );
+                },
                 onDismissed: (direction) {
                   cart.removeItem(cart.items.values.toList()[index].id);
                   print(cart.items.length);
