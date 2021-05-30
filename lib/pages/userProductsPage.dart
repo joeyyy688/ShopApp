@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/pages/editProductPage.dart';
 import 'package:shopapp/providers/products_provider.dart';
 import 'package:shopapp/widgets/app_Drawer.dart';
 
@@ -46,7 +47,10 @@ class _UserProductsPageState extends State<UserProductsPage> {
                         children: [
                           IconButton(
                             icon: Icon(Icons.edit),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(EditProductPage.routeName);
+                            },
                             color: Theme.of(context).primaryColor,
                           ),
                           IconButton(
