@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/pages/products_details.dart';
@@ -57,7 +59,22 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
                 color: Theme.of(context).accentColor,
               ),
               onPressed: () {
+                final snackBar = SnackBar(
+                  content: Text('Item Added to Cart'),
+                  duration: Duration(seconds: 5),
+                  action: SnackBarAction(
+                    label: 'Undo',
+                    onPressed: () {
+                      cart.removeSingleItem(products.id);
+                    },
+                  ),
+                );
                 cart.addItem(products.id, products.price, products.title);
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                //inspect(cart.items);
+                //print(cart.items[products.id]);
+                //print();
               },
             ),
           ),
