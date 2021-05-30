@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/pages/ordersPage.dart';
+import 'package:shopapp/pages/userProductsPage.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _AppDrawerState extends State<AppDrawer> {
       child: Column(
         children: [
           AppBar(
-            title: Text('Hello Friend'),
+            title: Text('Hello User'),
             automaticallyImplyLeading: false,
           ),
           Divider(),
@@ -35,13 +36,24 @@ class _AppDrawerState extends State<AppDrawer> {
               Navigator.of(context).pushReplacementNamed('/');
             },
           ),
+          Divider(),
           _buildDrawer(
             icon: Icon(Icons.payment),
             title: 'Order',
             onTapHandler: () {
               Navigator.of(context).pushReplacementNamed(OrdersPage.routeName);
             },
-          )
+          ),
+          Divider(),
+          _buildDrawer(
+            icon: Icon(Icons.edit),
+            title: 'Manage Products',
+            onTapHandler: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UserProductsPage.routeName);
+            },
+          ),
+          Divider(),
         ],
       ),
     );
