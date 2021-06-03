@@ -42,6 +42,13 @@ class _EditProductPageState extends State<EditProductPage> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
+      if (!imageUrlController.text.startsWith('http') ||
+          !imageUrlController.text.startsWith('https') ||
+          !imageUrlController.text.endsWith('.jpg') ||
+          !imageUrlController.text.endsWith('.png') ||
+          !imageUrlController.text.endsWith('..jpeg')) {
+        return;
+      }
       setState(() {});
     }
   }
@@ -111,6 +118,18 @@ class _EditProductPageState extends State<EditProductPage> {
                       FocusScope.of(context)
                           .requestFocus(_descriptionFocusNode);
                     },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'This field is required';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Enter valid number';
+                      }
+                      if (double.parse(value) <= 0) {
+                        return 'Enter a number greater than zero';
+                      }
+                      return null;
+                    },
                     onSaved: (newValue) {
                       setState(() {
                         editedProducts = Product(
@@ -127,6 +146,15 @@ class _EditProductPageState extends State<EditProductPage> {
                     maxLines: 3,
                     keyboardType: TextInputType.multiline,
                     focusNode: _descriptionFocusNode,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'This field is required';
+                      }
+                      if (value.length < 10) {
+                        return 'Must be at least 10 characters long';
+                      }
+                      return null;
+                    },
                     onSaved: (newValue) {
                       setState(() {
                         editedProducts = Product(
@@ -169,6 +197,22 @@ class _EditProductPageState extends State<EditProductPage> {
                             textInputAction: TextInputAction.done,
                             controller: imageUrlController,
                             focusNode: _imageUrlFocusNode,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'This field is required';
+                              }
+                              if (!value.startsWith('http') &&
+                                  !value.startsWith('https')) {
+                                return 'Enter a valid URL';
+                              }
+                              if (!value.endsWith('.jpg') &&
+                                  !value.endsWith('.png') &&
+                                  !value.endsWith('..jpeg')) {
+                                return 'Enter a valid URL';
+                              }
+
+                              return null;
+                            },
                             onSaved: (newValue) {
                               setState(() {
                                 editedProducts = Product(
