@@ -38,10 +38,13 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
             leading: Consumer<Product>(
               builder: (context, value, child) {
                 return IconButton(
-                  icon: Icon(products.isFavourite
-                      ? Icons.favorite_rounded
-                      : Icons.favorite_border_outlined),
-                  color: Theme.of(context).accentColor,
+                  icon: Icon(
+                    products.isFavourite
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_outlined,
+                    color: Colors.red,
+                  ),
+                  //color: Theme.of(context).accentColor,
                   onPressed: () {
                     products.changeFavouriteValue();
                   },

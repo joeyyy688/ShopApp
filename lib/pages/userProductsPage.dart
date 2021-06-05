@@ -21,6 +21,7 @@ class _UserProductsPageState extends State<UserProductsPage> {
             icon: Icon(Icons.add),
             onPressed: () {
               ///code
+              Navigator.of(context).pushNamed(EditProductPage.routeName);
             },
           )
         ],
@@ -48,14 +49,21 @@ class _UserProductsPageState extends State<UserProductsPage> {
                           IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(EditProductPage.routeName);
+                              Navigator.of(context).pushNamed(
+                                  EditProductPage.routeName,
+                                  arguments: productsData.items[index].id);
                             },
                             color: Theme.of(context).primaryColor,
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {},
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).errorColor,
+                            ),
+                            onPressed: () {
+                              productsData.deleteProduct(index);
+                              //print(index);
+                            },
                           )
                         ],
                       ),

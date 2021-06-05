@@ -65,6 +65,21 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateProduct(String id, Product newProduct) {
+    final prodctIndex = this._items.indexWhere((element) => element.id == id);
+    if (prodctIndex >= 0) {
+      _items[prodctIndex] = newProduct;
+      notifyListeners();
+    } else {
+      return;
+    }
+  }
+
+  void deleteProduct(int productIndex) {
+    this._items.removeAt(productIndex);
+    notifyListeners();
+  }
+
   // void showFavouritesOnly() {
   //   _showFavourites = true;
   //   notifyListeners();
