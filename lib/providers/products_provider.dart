@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
+import 'package:shopapp/constants/colors.dart';
 import 'package:shopapp/providers/productsModels.dart';
+import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [
@@ -53,16 +57,31 @@ class ProductsProvider with ChangeNotifier {
     return this._items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     //continue here
-    final newProduct = Product(
-        id: DateTime.now().toString(),
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl);
-    this._items.add(newProduct);
-    notifyListeners();
+    try {
+      var response = await http.post(Uri.parse(postUri),
+          body: json.encode({
+            'title': product.title,
+            'description': product.description,
+            'imageURL': product.imageUrl,
+            'price': product.price,
+            'isFavourite': product.isFavourite
+          }));
+
+      var apiResponds = json.decode(response.body);
+      print(apiResponds["name"]);
+      final newProduct = Product(
+          id: apiResponds["name"],
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl);
+      this._items.add(newProduct);
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
