@@ -11,6 +11,11 @@ class UserProductsPage extends StatefulWidget {
 }
 
 class _UserProductsPageState extends State<UserProductsPage> {
+  Future<void> refreshPage() async {
+    await Provider.of<ProductsProvider>(context, listen: false)
+        .fecthAndSetProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context, listen: true);
@@ -27,7 +32,11 @@ class _UserProductsPageState extends State<UserProductsPage> {
         ],
       ),
       drawer: AppDrawer(),
-      body: SingleChildScrollView(
+      body: RefreshIndicator(
+        onRefresh: refreshPage,
+        color: Theme.of(context).primaryColor,
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        strokeWidth: 3,
         child: Container(
           height: MediaQuery.of(context).size.height * 0.9,
           child: Padding(
@@ -60,8 +69,20 @@ class _UserProductsPageState extends State<UserProductsPage> {
                               Icons.delete,
                               color: Theme.of(context).errorColor,
                             ),
-                            onPressed: () {
-                              productsData.deleteProduct(index);
+                            onPressed: () async {
+                              try {
+                                await productsData.deleteProduct(
+                                    productsData.items[index].id);
+                              } catch (e) {
+                                final snackBar = SnackBar(
+                                  content: Text('Item Could not be deleted'),
+                                  duration: Duration(seconds: 5),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
                               //print(index);
                             },
                           )

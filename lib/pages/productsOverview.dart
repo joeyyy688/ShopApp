@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/providers/products_provider.dart';
 import 'package:shopapp/widgets/app_Drawer.dart';
 //import 'package:provider/provider.dart';
 import 'package:shopapp/widgets/productsGridView.dart';
@@ -18,6 +19,35 @@ class ProductsOverview extends StatefulWidget {
 
 class _ProductsOverviewState extends State<ProductsOverview> {
   bool showOnlyFavouritesData = false;
+  bool isInit = true;
+  bool isLoading = false;
+  @override
+  void initState() {
+    // Future.delayed(Duration.zero, () {
+    //   Provider.of<ProductsProvider>(context).fecthAndSetProducts();
+    // });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (isInit) {
+      setState(() {
+        isLoading = true;
+      });
+      Provider.of<ProductsProvider>(context)
+          .fecthAndSetProducts()
+          .then((value) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+    isInit = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     //final product = Provider.of<ProductsProvider>(context);
@@ -76,9 +106,13 @@ class _ProductsOverviewState extends State<ProductsOverview> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGridView(
-        favouriteData: showOnlyFavouritesData,
-      ),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGridView(
+              favouriteData: showOnlyFavouritesData,
+            ),
     );
   }
 }

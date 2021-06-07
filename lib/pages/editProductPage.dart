@@ -40,7 +40,7 @@ class _EditProductPageState extends State<EditProductPage> {
   @override
   void initState() {
     super.initState();
-    //_imageUrlFocusNode.addListener(_updateImageUrl);
+    _imageUrlFocusNode.addListener(updateImageUrl);
   }
 
   @override
@@ -64,66 +64,63 @@ class _EditProductPageState extends State<EditProductPage> {
     super.didChangeDependencies();
   }
 
-/*
-  void _updateImageUrl() {
+  void updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
-      if (!imageUrlController.text.startsWith('http') || !imageUrlController.text.startsWith('https') || !imageUrlController.text.endsWith('.jpg') || !imageUrlController.text.endsWith('.png') || !imageUrlController.text.endsWith('..jpeg')) {
+      if ((!imageUrlController.text.startsWith('http') &&
+              !imageUrlController.text.startsWith('https')) ||
+          (!imageUrlController.text.endsWith('.png') &&
+              !imageUrlController.text.endsWith('.jpg') &&
+              !imageUrlController.text.endsWith('.jpeg'))) {
         return;
       }
       setState(() {});
     }
   }
-*/
+
   Future<void> saveForm() async {
     var isFormValid = formKey.currentState.validate();
-
     if (!isFormValid) {
       return;
     }
-
     formKey.currentState.save();
     setState(() {
       isLoading = true;
     });
     if (editedProducts.id != null) {
-      Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(editedProducts.id, editedProducts);
-      Navigator.of(context).pop();
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        isLoading = false;
-      });
-    }
-    try {
       await Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(editedProducts);
-    } catch (e) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('An Error Occured'),
-            content: Text('Something went wrong'),
-            actions: [
+          .updateProduct(editedProducts.id, editedProducts);
+    } else {
+      try {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(editedProducts);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: <Widget>[
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Text('Ok'))
             ],
-          );
-        },
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context).pop();
-
-      print('yooooooooooooooooo');
+          ),
+        );
+      }
+      // finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+      // }
     }
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
   }
 
   @override
@@ -161,7 +158,7 @@ class _EditProductPageState extends State<EditProductPage> {
                               editedProducts = Product(
                                   title: newValue,
                                   description: editedProducts.description,
-                                  id: null,
+                                  id: editedProducts.id,
                                   imageUrl: editedProducts.imageUrl,
                                   price: editedProducts.price,
                                   isFavourite: editedProducts.isFavourite);
@@ -201,7 +198,7 @@ class _EditProductPageState extends State<EditProductPage> {
                               editedProducts = Product(
                                   title: editedProducts.title,
                                   description: editedProducts.description,
-                                  id: null,
+                                  id: editedProducts.id,
                                   imageUrl: editedProducts.imageUrl,
                                   price: double.parse(newValue),
                                   isFavourite: editedProducts.isFavourite);
@@ -218,8 +215,8 @@ class _EditProductPageState extends State<EditProductPage> {
                             if (value.isEmpty) {
                               return 'This field is required';
                             }
-                            if (value.length < 10) {
-                              return 'Must be at least 10 characters long';
+                            if (value.length < 5) {
+                              return 'Must be at least 5 characters long';
                             }
                             return null;
                           },
@@ -228,7 +225,7 @@ class _EditProductPageState extends State<EditProductPage> {
                               editedProducts = Product(
                                   title: editedProducts.title,
                                   description: newValue,
-                                  id: null,
+                                  id: editedProducts.id,
                                   imageUrl: editedProducts.imageUrl,
                                   price: editedProducts.price,
                                   isFavourite: editedProducts.isFavourite);
@@ -289,7 +286,7 @@ class _EditProductPageState extends State<EditProductPage> {
                                           title: editedProducts.title,
                                           description:
                                               editedProducts.description,
-                                          id: null,
+                                          id: editedProducts.id,
                                           imageUrl: newValue,
                                           price: editedProducts.price,
                                           isFavourite:
