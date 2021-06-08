@@ -113,7 +113,7 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     String uri =
         'https://test-2f016-default-rtdb.firebaseio.com/products/$id.json';
-    http.put(Uri.parse(uri),
+    http.patch(Uri.parse(uri),
         body: json.encode({
           'description': newProduct.description,
           'title': newProduct.title,
