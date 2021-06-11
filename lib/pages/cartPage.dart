@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopapp/constants/colors.dart';
+import 'package:shopapp/constants/constants.dart';
 import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/providers/orders.dart';
 
@@ -13,6 +13,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context, listen: true);
@@ -47,15 +48,26 @@ class _CartPageState extends State<CartPage> {
                         style: TextStyle(color: Colors.white),
                       )),
                   TextButton(
-                      onPressed: () {
-                        orders.addOrder(
-                            cart.items.values.toList(), cart.totalAmount);
-                        cart.clearCart();
-                      },
-                      child: Text(
-                        'ORDER NOW',
-                        style: TextStyle(color: Theme.of(context).primaryColor),
-                      )),
+                      onPressed: cart.totalAmount <= 0 || isLoading
+                          ? null
+                          : () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await orders.addOrder(
+                                  cart.items.values.toList(), cart.totalAmount);
+                              setState(() {
+                                isLoading = false;
+                              });
+                              cart.clearCart();
+                            },
+                      child: isLoading
+                          ? CircularProgressIndicator()
+                          : Text(
+                              'ORDER NOW',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            )),
                 ],
               ),
             ),

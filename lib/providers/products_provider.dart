@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
-import 'package:shopapp/constants/colors.dart';
+import 'package:shopapp/constants/constants.dart';
 import 'package:shopapp/models/httpException.dart';
 import 'package:shopapp/providers/productsModels.dart';
 import 'package:http/http.dart' as http;
@@ -64,6 +64,9 @@ class ProductsProvider with ChangeNotifier {
       var extractedResponse =
           json.decode(response.body) as Map<String, dynamic>;
       List<Product> loadedProducts = [];
+      if (extractedResponse == null) {
+        return;
+      }
       extractedResponse.forEach((key, value) {
         loadedProducts.add(Product(
           id: key,
