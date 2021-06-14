@@ -7,6 +7,7 @@ import 'package:shopapp/pages/ordersPage.dart';
 import 'package:shopapp/pages/productsOverview.dart';
 import 'package:shopapp/pages/products_details.dart';
 import 'package:shopapp/pages/userProductsPage.dart';
+import 'package:shopapp/providers/auth.dart';
 import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/providers/orders.dart';
 import 'package:shopapp/providers/products_provider.dart';
@@ -21,11 +22,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<Auth>.value(value: Auth()),
         ChangeNotifierProvider<ProductsProvider>.value(
           value: ProductsProvider(),
         ),
         ChangeNotifierProvider<Cart>.value(value: Cart()),
-        ChangeNotifierProvider.value(value: Orders()),
+        ChangeNotifierProvider<Orders>.value(value: Orders()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
