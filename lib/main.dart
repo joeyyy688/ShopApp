@@ -21,32 +21,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<Auth>.value(value: Auth()),
-        ChangeNotifierProvider<ProductsProvider>.value(
-          value: ProductsProvider(),
-        ),
-        ChangeNotifierProvider<Cart>.value(value: Cart()),
-        ChangeNotifierProvider<Orders>.value(value: Orders()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
-        ),
-        home: AuthScreen(),
-        routes: {
-          //ProductsOverview.routeName: (context) => ProductsOverview(),
-          ProductsDetails.routeName: (context) => ProductsDetails(),
-          CartPage.routeName: (context) => CartPage(),
-          OrdersPage.routeName: (context) => OrdersPage(),
-          UserProductsPage.routeName: (context) => UserProductsPage(),
-          EditProductPage.routeName: (context) => EditProductPage(),
-        },
-      ),
-    );
+        providers: [
+          ChangeNotifierProvider<Auth>.value(value: Auth()),
+          ChangeNotifierProvider<ProductsProvider>.value(
+            value: ProductsProvider(),
+          ),
+          ChangeNotifierProvider<Cart>.value(value: Cart()),
+          ChangeNotifierProvider<Orders>.value(value: Orders()),
+        ],
+        child: Consumer<Auth>(
+          builder: (context, authData, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                primarySwatch: Colors.purple,
+                accentColor: Colors.deepOrange,
+                fontFamily: 'Lato',
+              ),
+              home: authData.isAuth ? ProductsOverview() : AuthScreen(),
+              routes: {
+                ProductsOverview.routeName: (context) => ProductsOverview(),
+                ProductsDetails.routeName: (context) => ProductsDetails(),
+                CartPage.routeName: (context) => CartPage(),
+                OrdersPage.routeName: (context) => OrdersPage(),
+                UserProductsPage.routeName: (context) => UserProductsPage(),
+                EditProductPage.routeName: (context) => EditProductPage(),
+              },
+            );
+          },
+        ));
   }
 }
