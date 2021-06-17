@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/pages/products_details.dart';
+import 'package:shopapp/providers/auth.dart';
 import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/providers/productsModels.dart';
 
@@ -22,6 +23,7 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
   Widget build(BuildContext context) {
     final products = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(13),
       child: InkWell(
@@ -46,7 +48,7 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
                   ),
                   //color: Theme.of(context).accentColor,
                   onPressed: () {
-                    products.changeFavouriteValue(value.id);
+                    products.changeFavouriteValue(value.id, auth.token);
                   },
                 );
               },

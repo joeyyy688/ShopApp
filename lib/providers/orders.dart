@@ -22,8 +22,18 @@ class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   List<OrderItem> get ordersItems => [..._orders];
 
+  String authToken = "";
+  //String authUserId = "";
+
+  void update(String tokenn /*, String userIdd*/) {
+    this.authToken = tokenn;
+    //this.authUserId = userIdd;
+    notifyListeners();
+  }
+
   Future<void> fetchAndSetOrders() async {
-    final response = await http.get(Uri.parse(ordersPostUri));
+    final response = await http.get(Uri.parse(
+        "https://test-2f016-default-rtdb.firebaseio.com/orders.json?auth=$authToken"));
     final decodedResponse = json.decode(response.body);
     print(decodedResponse);
     final List<OrderItem> loadedOrderData = [];
@@ -51,7 +61,9 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double totalAmount) async {
     DateTime timeStamp = DateTime.now();
-    final response = await http.post(Uri.parse(ordersPostUri),
+    final response = await http.post(
+        Uri.parse(
+            "https://test-2f016-default-rtdb.firebaseio.com/orders.json?auth=$authToken"),
         body: json.encode({
           'amount': totalAmount,
           'dateTime': timeStamp.toIso8601String(),

@@ -19,12 +19,12 @@ class Product with ChangeNotifier {
       @required this.imageUrl,
       this.isFavourite = false});
 
-  Future<void> changeFavouriteValue(String productId) async {
+  Future<void> changeFavouriteValue(String productId, String authToken) async {
     final oldStatus = isFavourite;
     this.isFavourite = !isFavourite;
     notifyListeners();
     String uri =
-        'https://test-2f016-default-rtdb.firebaseio.com/products/$productId.json';
+        'https://test-2f016-default-rtdb.firebaseio.com/products/$productId.json?auth=$authToken';
     try {
       final response = await http.patch(Uri.parse(uri),
           body: json.encode({'isFavourite': isFavourite}));
