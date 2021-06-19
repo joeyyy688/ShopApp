@@ -48,7 +48,8 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
                   ),
                   //color: Theme.of(context).accentColor,
                   onPressed: () {
-                    products.changeFavouriteValue(value.id, auth.token);
+                    products.changeFavouriteValue(
+                        value.id, auth.token, auth.userID);
                   },
                 );
               },

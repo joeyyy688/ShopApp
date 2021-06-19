@@ -11,14 +11,15 @@ class UserProductsPage extends StatefulWidget {
 }
 
 class _UserProductsPageState extends State<UserProductsPage> {
-  Future<void> refreshPage() async {
+  Future<void> refreshPage(BuildContext context) async {
     await Provider.of<ProductsProvider>(context, listen: false)
-        .fecthAndSetProducts();
+        .fecthAndSetProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final productsData = Provider.of<ProductsProvider>(context, listen: true);
+    //final productsData = Provider.of<ProductsProvider>(context, listen: true);
+    print("rebuilding");
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -32,69 +33,80 @@ class _UserProductsPageState extends State<UserProductsPage> {
         ],
       ),
       drawer: AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: refreshPage,
-        color: Theme.of(context).primaryColor,
-        triggerMode: RefreshIndicatorTriggerMode.anywhere,
-        strokeWidth: 3,
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: ListView.builder(
-              itemCount: productsData.items.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(productsData.items[index].imageUrl),
-                    ),
-                    title: Text(productsData.items[index].title),
-                    trailing: Container(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                  EditProductPage.routeName,
-                                  arguments: productsData.items[index].id);
-                            },
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).errorColor,
-                            ),
-                            onPressed: () async {
-                              try {
-                                await productsData.deleteProduct(
-                                    productsData.items[index].id);
-                              } catch (e) {
-                                final snackBar = SnackBar(
-                                  content: Text('Item Could not be deleted'),
-                                  duration: Duration(seconds: 5),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                              //print(index);
-                            },
-                          )
-                        ],
+      body: FutureBuilder(
+        future: refreshPage(context),
+        builder: (context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : RefreshIndicator(
+                onRefresh: () => refreshPage(context),
+                color: Theme.of(context).primaryColor,
+                triggerMode: RefreshIndicatorTriggerMode.anywhere,
+                strokeWidth: 3,
+                child: Container(
+                    height: MediaQuery.of(context).size.height * 0.9,
+                    child: Consumer<ProductsProvider>(
+                      builder: (context, productsData, child) => Padding(
+                        padding: EdgeInsets.all(8),
+                        child: ListView.builder(
+                          itemCount: productsData.items.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      productsData.items[index].imageUrl),
+                                ),
+                                title: Text(productsData.items[index].title),
+                                trailing: Container(
+                                  width: 100,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          Navigator.of(context).pushNamed(
+                                              EditProductPage.routeName,
+                                              arguments:
+                                                  productsData.items[index].id);
+                                        },
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Theme.of(context).errorColor,
+                                        ),
+                                        onPressed: () async {
+                                          try {
+                                            await productsData.deleteProduct(
+                                                productsData.items[index].id);
+                                          } catch (e) {
+                                            final snackBar = SnackBar(
+                                              content: Text(
+                                                  'Item Could not be deleted'),
+                                              duration: Duration(seconds: 5),
+                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+                                          }
+                                          //print(index);
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+                    )),
+              ),
       ),
     );
   }

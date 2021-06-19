@@ -46,11 +46,11 @@ class ProductsProvider with ChangeNotifier {
   ];
   //bool _showFavourites = false;
   String authToken = "";
-  //String authUserId = "";
+  String authUserId = "";
 
-  void update(String tokenn /*, String userIdd*/) {
+  void update(String tokenn, String userIdd) {
     this.authToken = tokenn;
-    //this.authUserId = userIdd;
+    this.authUserId = userIdd;
     notifyListeners();
   }
 
@@ -69,25 +69,31 @@ class ProductsProvider with ChangeNotifier {
     return this._items.firstWhere((element) => element.id == id);
   }
 
-  Future<void> fecthAndSetProducts() async {
+  Future<void> fecthAndSetProducts([bool filterByUser = false]) async {
+    String filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$authUserId"' : '';
     try {
       final response = await http.get(Uri.parse(
-          "https://test-2f016-default-rtdb.firebaseio.com/products.json?auth=$authToken"));
+          'https://test-2f016-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString'));
       var extractedResponse =
           json.decode(response.body) as Map<String, dynamic>;
       List<Product> loadedProducts = [];
       if (extractedResponse == null) {
         return;
       }
+      String userFavouriteUri =
+          'https://test-2f016-default-rtdb.firebaseio.com/userFavourite/$authUserId/.json?auth=$authToken';
+      final favouriteRespose = await http.get(Uri.parse(userFavouriteUri));
+      final favouriteData = json.decode(favouriteRespose.body);
       extractedResponse.forEach((key, value) {
         loadedProducts.add(Product(
-          id: key,
-          title: value['title'],
-          description: value['description'],
-          price: value['price'],
-          imageUrl: value['imageURL'],
-          isFavourite: value['isFavourite'],
-        ));
+            id: key,
+            title: value['title'],
+            description: value['description'],
+            price: value['price'],
+            imageUrl: value['imageURL'],
+            isFavourite:
+                favouriteData == null ? false : favouriteData[value] ?? false));
       });
       _items = loadedProducts;
       notifyListeners();
@@ -103,13 +109,13 @@ class ProductsProvider with ChangeNotifier {
     try {
       var response = await http.post(
           Uri.parse(
-              "https://test-2f016-default-rtdb.firebaseio.com/products.json?auth=$authToken"),
+              'https://test-2f016-default-rtdb.firebaseio.com/products.json?auth=$authToken'),
           body: json.encode({
             'title': product.title,
             'description': product.description,
             'imageURL': product.imageUrl,
             'price': product.price,
-            'isFavourite': product.isFavourite
+            'creatorId': authUserId
           }));
 
       var extractedResponse = json.decode(response.body);
