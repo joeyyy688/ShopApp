@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopapp/pages/ordersPage.dart';
 import 'package:shopapp/pages/userProductsPage.dart';
+import 'package:shopapp/providers/auth.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -54,6 +56,16 @@ class _AppDrawerState extends State<AppDrawer> {
             },
           ),
           Divider(),
+          _buildDrawer(
+            icon: Icon(Icons.exit_to_app_outlined),
+            title: 'Logout',
+            onTapHandler: () {
+              Navigator.of(context).pop();
+              Provider.of<Auth>(context, listen: false).logOut();
+              // Navigator.of(context)
+              //     .pushReplacementNamed(UserProductsPage.routeName);
+            },
+          ),
         ],
       ),
     );
