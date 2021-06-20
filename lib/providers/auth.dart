@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/constants/constants.dart';
 import 'package:shopapp/models/httpException.dart';
 
@@ -47,8 +48,14 @@ class Auth with ChangeNotifier {
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(extractedResponse['expiresIn'])));
       autoLogOut();
-      //return extractedResponse;
       notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userID': _userId,
+        'expiryDate': _expiryDate.toIso8601String()
+      });
+      prefs.setString('userInfo', userData);
     } catch (e) {
       throw e;
     }
@@ -71,15 +78,46 @@ class Auth with ChangeNotifier {
       _userId = extractedResponse['localId'];
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(extractedResponse['expiresIn'])));
-      notifyListeners();
       autoLogOut();
+      notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userID': _userId,
+        'expiryDate': _expiryDate.toIso8601String()
+      });
+      prefs.setString('userInfo', userData);
       //return extractedResponse;
     } catch (e) {
       throw e;
     }
   }
 
-  void logOut() {
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey('userInfo')) {
+      return false;
+    }
+
+    final extractedUserData =
+        json.decode(prefs.getString('userInfo')) as Map<String, Object>;
+
+    final expiryDate = DateTime.parse(extractedUserData['expiryData']);
+
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+
+    _token = extractedUserData['token'];
+    _expiryDate = expiryDate;
+    _userId = extractedUserData['userID'];
+    notifyListeners();
+    autoLogOut();
+    return true;
+  }
+
+  Future<void> logOut() async {
     _token = null;
     _userId = null;
     _expiryDate = null;
@@ -88,6 +126,8 @@ class Auth with ChangeNotifier {
       _authTimer = null;
     }
     notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 
   void autoLogOut() {

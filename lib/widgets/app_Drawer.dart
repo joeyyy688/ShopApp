@@ -61,6 +61,7 @@ class _AppDrawerState extends State<AppDrawer> {
             title: 'Logout',
             onTapHandler: () {
               Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
               Provider.of<Auth>(context, listen: false).logOut();
               // Navigator.of(context)
               //     .pushReplacementNamed(UserProductsPage.routeName);

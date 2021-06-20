@@ -6,6 +6,7 @@ import 'package:shopapp/pages/editProductPage.dart';
 import 'package:shopapp/pages/ordersPage.dart';
 import 'package:shopapp/pages/productsOverview.dart';
 import 'package:shopapp/pages/products_details.dart';
+import 'package:shopapp/pages/splash_page.dart.dart';
 import 'package:shopapp/pages/userProductsPage.dart';
 import 'package:shopapp/providers/auth.dart';
 import 'package:shopapp/providers/cart.dart';
@@ -43,13 +44,21 @@ class MyApp extends StatelessWidget {
           builder: (context, authData, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: 'MyShop',
               theme: ThemeData(
                 primarySwatch: Colors.purple,
                 accentColor: Colors.deepOrange,
                 fontFamily: 'Lato',
               ),
-              home: authData.isAuth ? ProductsOverview() : AuthScreen(),
+              home: authData.isAuth
+                  ? ProductsOverview()
+                  : FutureBuilder(
+                      future: authData.tryAutoLogin(),
+                      builder: (context, snapshot) =>
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? SplashScreen()
+                              : AuthScreen(),
+                    ),
               routes: {
                 ProductsOverview.routeName: (context) => ProductsOverview(),
                 ProductsDetails.routeName: (context) => ProductsDetails(),
