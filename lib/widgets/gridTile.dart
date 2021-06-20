@@ -32,9 +32,13 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
               .pushNamed(ProductsDetails.routeName, arguments: products.id);
         },
         child: GridTile(
-          child: Image.network(
-            products.imageUrl,
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: products.id,
+            child: FadeInImage(
+              placeholder: AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(products.imageUrl),
+              fit: BoxFit.cover,
+            ),
           ),
           footer: GridTileBar(
             leading: Consumer<Product>(

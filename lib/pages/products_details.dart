@@ -21,20 +21,27 @@ class _ProductsDetailsState extends State<ProductsDetails> {
         Provider.of<ProductsProvider>(context).searchItemByID(productID);
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar(
-        title: Text(selectedProductData.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 350,
-              width: double.infinity,
-              child: Image.network(
-                selectedProductData.imageUrl,
-                fit: BoxFit.cover,
+      // appBar: AppBar(
+      //   title: Text(selectedProductData.title),
+      // ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(selectedProductData.title),
+              background: Hero(
+                tag: selectedProductData.id,
+                child: Image.network(
+                  selectedProductData.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
             SizedBox(
               height: 15,
             ),
@@ -42,6 +49,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
               child: Text(
                 '\$${selectedProductData.price}',
                 style: TextStyle(fontSize: 25, color: greyColor),
+                textAlign: TextAlign.center,
               ),
             ),
             SizedBox(
@@ -58,9 +66,12 @@ class _ProductsDetailsState extends State<ProductsDetails> {
                   fontSize: 17,
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+            SizedBox(
+              height: 800,
+            ),
+          ]))
+        ],
       ),
     );
   }
