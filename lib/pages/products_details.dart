@@ -47,7 +47,7 @@ class _ProductsDetailsState extends State<ProductsDetails> {
             ),
             Container(
               child: Text(
-                'GHS ${selectedProductData.price}',
+                '\$ ${selectedProductData.price}',
                 style: TextStyle(fontSize: 25, color: greyColor),
                 textAlign: TextAlign.center,
               ),

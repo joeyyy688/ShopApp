@@ -43,20 +43,19 @@ class _ProductsGridTileState extends State<ProductsGridTile> {
           footer: GridTileBar(
             leading: Consumer<Product>(
               builder: (context, value, child) {
-                return Container();
-                // IconButton(
-                //   icon: Icon(
-                //     products.isFavourite
-                //         ? Icons.favorite_rounded
-                //         : Icons.favorite_border_outlined,
-                //     color: Colors.red,
-                //   ),
-                //   //color: Theme.of(context).accentColor,
-                //   onPressed: () {
-                //     products.changeFavouriteValue(
-                //         value.id, auth.token, auth.userID);
-                //   },
-                // );
+                return IconButton(
+                  icon: Icon(
+                    products.isFavourite
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_outlined,
+                    color: Colors.red,
+                  ),
+                  //color: Theme.of(context).accentColor,
+                  onPressed: () {
+                    products.changeFavouriteValue(
+                        value.id, auth.token, auth.userID);
+                  },
+                );
               },
             ),
             backgroundColor: Colors.black87,

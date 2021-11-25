@@ -40,12 +40,12 @@ class _OrdersPageState extends State<OrdersPage> {
     //final ordersData = Provider.of<Orders>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        title: Text('QuickShop Lite - Orders'),
+        title: Text('MyShop - Orders'),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.85,
+            height: 500,
             child: FutureBuilder(
               future: Provider.of<Orders>(context, listen: false)
                   .fetchAndSetOrders(),
@@ -68,7 +68,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                 children: [
                                   ListTile(
                                     title: Text(
-                                        'Total: GHS ${ordersData.ordersItems[index].amount.toStringAsFixed(2)}'),
+                                        'Total: \$ ${ordersData.ordersItems[index].amount.toStringAsFixed(2)}'),
                                     subtitle: Text(
                                         '${DateFormat('EEE, ' ' MMM d, ' 'yyyy h:mm a').format(ordersData.ordersItems[index].dateTime)}'),
                                     trailing: IconButton(
@@ -108,7 +108,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                               FontWeight.bold),
                                                     ),
                                                     Text(
-                                                      '${element.quantity} x GHS ${element.price}',
+                                                      '${element.quantity} x \$ ${element.price}',
                                                       style: TextStyle(
                                                           fontSize: 19,
                                                           color: greyColor),

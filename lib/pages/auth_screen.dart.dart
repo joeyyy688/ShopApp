@@ -60,7 +60,7 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
                       child: Text(
-                        'QuickShop Lite',
+                        'MyShop',
                         style: TextStyle(
                           color: Theme.of(context).secondaryHeaderColor,
                           fontSize: 50,
