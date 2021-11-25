@@ -21,7 +21,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        title: Text('Your Cart'),
+        title: Text('QuickShop Lite - Cart'),
       ),
       body: Column(
         children: [
@@ -44,7 +44,7 @@ class _CartPageState extends State<CartPage> {
                   Chip(
                       backgroundColor: Theme.of(context).primaryColor,
                       label: Text(
-                        '\$ ${cart.totalAmount.toStringAsFixed(2)}',
+                        'GHS ${cart.totalAmount.toStringAsFixed(2)}',
                         style: TextStyle(color: Colors.white),
                       )),
                   TextButton(
@@ -136,7 +136,7 @@ class _CartPageState extends State<CartPage> {
                       leading: CircleAvatar(
                         child: FittedBox(
                             child: Text(
-                                '\$${cart.items.values.toList()[index].price}')),
+                                'GHS ${cart.items.values.toList()[index].price}')),
                       ),
                       title: Text(
                         '${cart.items.values.toList()[index].title}',
@@ -144,7 +144,7 @@ class _CartPageState extends State<CartPage> {
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       subtitle: Text(
-                          'Total: \$${cart.items.values.toList()[index].price * cart.items.values.toList()[index].quantity}'),
+                          'Total: GHS ${cart.items.values.toList()[index].price * cart.items.values.toList()[index].quantity}'),
                       trailing: Text(
                         '${cart.items.values.toList()[index].quantity} x',
                         style: TextStyle(

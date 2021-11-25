@@ -94,27 +94,28 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> tryAutoLogin() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    if (!prefs.containsKey('userInfo')) {
-      return false;
-    }
-
-    final extractedUserData =
-        json.decode(prefs.getString('userInfo')) as Map<String, Object>;
-
-    final expiryDate = DateTime.parse(extractedUserData['expiryData']);
-
-    if (expiryDate.isBefore(DateTime.now())) {
-      return false;
-    }
-
-    _token = extractedUserData['token'];
-    _expiryDate = expiryDate;
-    _userId = extractedUserData['userID'];
-    notifyListeners();
-    autoLogOut();
     return true;
+    // final prefs = await SharedPreferences.getInstance();
+
+    // if (!prefs.containsKey('userInfo')) {
+    //   return false;
+    // }
+
+    // final extractedUserData =
+    //     json.decode(prefs.getString('userInfo')) as Map<String, Object>;
+
+    // final expiryDate = DateTime.parse(extractedUserData['expiryData']);
+
+    // if (expiryDate.isBefore(DateTime.now())) {
+    //   return false;
+    // }
+
+    // _token = extractedUserData['token'];
+    // _expiryDate = expiryDate;
+    // _userId = extractedUserData['userID'];
+    // notifyListeners();
+    // autoLogOut();
+    // return true;
   }
 
   Future<void> logOut() async {

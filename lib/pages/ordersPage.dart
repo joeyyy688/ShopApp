@@ -40,12 +40,12 @@ class _OrdersPageState extends State<OrdersPage> {
     //final ordersData = Provider.of<Orders>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Orders'),
+        title: Text('QuickShop Lite - Orders'),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Container(
-            height: 400,
+            height: MediaQuery.of(context).size.height * 0.85,
             child: FutureBuilder(
               future: Provider.of<Orders>(context, listen: false)
                   .fetchAndSetOrders(),
@@ -68,7 +68,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                 children: [
                                   ListTile(
                                     title: Text(
-                                        'Total: \$${ordersData.ordersItems[index].amount.toStringAsFixed(2)}'),
+                                        'Total: GHS ${ordersData.ordersItems[index].amount.toStringAsFixed(2)}'),
                                     subtitle: Text(
                                         '${DateFormat('EEE, ' ' MMM d, ' 'yyyy h:mm a').format(ordersData.ordersItems[index].dateTime)}'),
                                     trailing: IconButton(
@@ -91,7 +91,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                       .length *
                                                   20.0 +
                                               20.0,
-                                          180),
+                                          300),
                                       child: ListView(
                                         children: ordersData
                                             .ordersItems[index].products
@@ -108,7 +108,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                                               FontWeight.bold),
                                                     ),
                                                     Text(
-                                                      '${element.quantity} x \$${element.price}',
+                                                      '${element.quantity} x GHS ${element.price}',
                                                       style: TextStyle(
                                                           fontSize: 19,
                                                           color: greyColor),
